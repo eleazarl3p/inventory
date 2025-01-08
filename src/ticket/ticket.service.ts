@@ -3,7 +3,7 @@ import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Ticket } from './entities/ticket.entity';
+import { Ticket, ticketStatus } from './entities/ticket.entity';
 
 @Injectable()
 export class TicketService {
@@ -35,6 +35,10 @@ export class TicketService {
 
   update(id: number, updateTicketDto: UpdateTicketDto) {
     return `This action updates a #${id} ticket`;
+  }
+
+  async updateStatus(_id: number, status: ticketStatus) {
+    return await this.ticketRepo.update({ _id }, { status });
   }
 
   remove(id: number) {

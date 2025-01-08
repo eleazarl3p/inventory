@@ -26,7 +26,7 @@ export class Stock {
   item: Item;
 
   @Column({ type: 'enum', enum: stockAction })
-  action: string;
+  s_type: string;
 
   @CreateDateColumn()
   date: Date;

@@ -10,7 +10,7 @@ export class CreateStockDto {
   item_id: number;
 
   @IsString()
-  action: string;
+  s_type: string;
 }
 
 @Injectable()

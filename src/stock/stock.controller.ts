@@ -16,8 +16,16 @@ export class StockController {
   constructor(private readonly stockService: StockService) {}
 
   @Post()
-  create(@Body(new ValidateListStockDto()) stocks: CreateStockDto[]) {
-    return this.stockService.create(stocks);
+  create(@Body(new ValidateListStockDto()) stock: CreateStockDto) {
+    return this.stockService.create(stock);
+  }
+
+  @Post('ticket/:id')
+  async addMultipleStodk(
+    @Param('id') ticket_id: number,
+    @Body(new ValidateListStockDto()) stocks: CreateStockDto[],
+  ) {
+    return this.stockService.addMultipleStodk(ticket_id, stocks);
   }
 
   @Get()
