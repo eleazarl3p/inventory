@@ -28,6 +28,11 @@ export class StockController {
     return this.stockService.addMultipleStodk(ticket_id, stocks);
   }
 
+  @Post('review')
+  reviewStock(@Body(new ValidateListStockDto()) stocks: CreateStockDto[]) {
+    this.stockService.reviewStock(stocks);
+  }
+
   @Get()
   findAll() {
     return this.stockService.findAll();

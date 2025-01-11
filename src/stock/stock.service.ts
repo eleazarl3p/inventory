@@ -2,7 +2,7 @@ import { Controller, Injectable } from '@nestjs/common';
 import { CreateStockDto } from './dto/create-stock.dto';
 import { UpdateStockDto } from './dto/update-stock.dto';
 import { Repository } from 'typeorm';
-import { Stock } from './entities/stock.entity';
+import { Stock, stockAction } from './entities/stock.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TicketService } from 'src/ticket/ticket.service';
 import { ticketStatus } from 'src/ticket/entities/ticket.entity';
@@ -53,5 +53,32 @@ export class StockService {
 
   remove(id: number) {
     return `This action removes a #${id} stock`;
+  }
+
+  async reviewStock(stocks: CreateStockDto[]) {
+    const allStocks = await this.findAll();
+
+    for (const stock of stocks) {
+      const itemInStocks = allStocks.filter(
+        (stk) => stk.item._id == stock.item_id,
+      );
+
+      if (itemInStocks) {
+        const quantity = itemInStocks.reduce(
+          (acc, stk) => acc + stk.quantity,
+          0,
+        );
+
+        if (quantity > stock.quantity) {
+          stock.s_type = stockAction.REVISONOUT;
+          stock.quantity = quantity - stock.quantity;
+          await this.create(stock);
+        } else if (quantity < stock.quantity) {
+          stock.s_type = stockAction.REVISONIN;
+          stock.quantity = stock.quantity - quantity;
+          await this.create(stock);
+        }
+      }
+    }
   }
 }

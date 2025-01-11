@@ -18,16 +18,43 @@ export class Item {
   @Column()
   barcode: string;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0.0,
+    transformer: {
+      to: (value: number) => value, // Save as is (number)
+      from: (value: string) => parseFloat(value), // Convert to number
+    },
+  })
   min_quantity: number;
 
   @Column()
   unit_of_measure: string;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0.0,
+    transformer: {
+      to: (value: number) => value, // Save as is (number)
+      from: (value: string) => parseFloat(value), // Convert to number
+    },
+  })
   purchase_price: number;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0.0,
+    transformer: {
+      to: (value: number) => value, // Save as is (number)
+      from: (value: string) => parseFloat(value), // Convert to number
+    },
+  })
   sale_price: number;
 
   @Column('text', { array: true })
