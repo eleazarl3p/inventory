@@ -1,8 +1,18 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import { IsArray, IsNumber, IsString, validate } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validate,
+} from 'class-validator';
 
 export class CreateItemDto {
+  @IsOptional()
+  @IsNumber()
+  _id: number;
+
   @IsString()
   name: string;
 

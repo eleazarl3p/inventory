@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ItemService } from './item.service';
 import { CreateItemDto, ValidateListItemDto } from './dto/create-item.dto';
@@ -26,6 +27,7 @@ export class ItemController {
   ) {
     return await this.itemService.createMultipleItem(itemsDto);
   }
+
   @Get()
   findAll() {
     return this.itemService.findAll();
@@ -39,6 +41,13 @@ export class ItemController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
     return this.itemService.update(+id, updateItemDto);
+  }
+
+  @Put()
+  updateMultiple(
+    @Body(new ValidateListItemDto()) updateItemDto: UpdateItemDto[],
+  ) {
+    return this.itemService.updateMultiple(updateItemDto);
   }
 
   @Delete(':id')

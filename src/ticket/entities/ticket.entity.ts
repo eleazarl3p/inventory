@@ -35,5 +35,5 @@ export class Ticket {
   date: Date;
 
   @OneToMany(() => TicketItem, (ti) => ti.ticket)
-  ticket_item: TicketItem[];
+  items: TicketItem[];
 }

@@ -25,9 +25,21 @@ export class TicketItem {
   })
   quantity: number;
 
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0.0,
+    transformer: {
+      to: (value: number) => value, // Save as is (number)
+      from: (value: string) => parseFloat(value), // Convert to number
+    },
+  })
+  price: number;
+
   @ManyToOne(() => Item, (item) => item.ticket_item)
   item: Item;
 
-  @ManyToOne(() => Ticket, (ticket) => ticket.ticket_item)
+  @ManyToOne(() => Ticket, (ticket) => ticket.items)
   ticket: Ticket;
 }

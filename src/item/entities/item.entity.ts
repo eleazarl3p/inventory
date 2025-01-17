@@ -12,10 +12,10 @@ export class Item {
   @PrimaryGeneratedColumn()
   _id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   barcode: string;
 
   @Column({

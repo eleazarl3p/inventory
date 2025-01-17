@@ -12,9 +12,12 @@ export class ItemService {
     private readonly itemRepo: Repository<Item>,
   ) {}
   async create(createItemDto: CreateItemDto) {
-    const newItem = this.itemRepo.create(createItemDto);
-
-    return await this.itemRepo.save(newItem);
+    try {
+      const newItem = this.itemRepo.create(createItemDto);
+      return await this.itemRepo.save(newItem);
+    } catch (error) {
+      console.log('error : ', error);
+    }
   }
 
   async createMultipleItem(itemsDto: CreateItemDto[]) {
@@ -35,8 +38,17 @@ export class ItemService {
     return `This action returns a #${id} item`;
   }
 
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+  async update(_id: number, updateItemDto: UpdateItemDto) {
+    return this.itemRepo.update({ _id }, updateItemDto);
+  }
+  async updateMultiple(updateItemDto: UpdateItemDto[]) {
+    const result = await Promise.all(
+      updateItemDto.map(async (item) => {
+        const { _id } = item;
+        return await this.update(_id, item);
+      }),
+    );
+    return result;
   }
 
   remove(id: number) {
