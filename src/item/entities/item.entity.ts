@@ -1,10 +1,18 @@
 import { Stock } from 'src/stock/entities/stock.entity';
 import { TicketItem } from 'src/ticket/entities/ticket-item.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum itemCat {
   HARDWARE = 'HARDWARE',
   ELECTRONICS = 'ELECTRONICS',
+  MATERIAL = 'MATERIAL',
   OTHER = 'OTHER',
 }
 @Entity()
@@ -71,4 +79,9 @@ export class Item {
 
   @OneToMany(() => TicketItem, (ticket) => ticket.item)
   ticket_item: TicketItem[];
+
+  @ManyToOne(() => User)
+  user: User;
 }
+
+// case number 1609763

@@ -1,4 +1,5 @@
 import { Item } from 'src/item/entities/item.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -40,4 +41,7 @@ export class Stock {
 
   @CreateDateColumn()
   date: Date;
+
+  @ManyToOne(() => User)
+  user: User;
 }

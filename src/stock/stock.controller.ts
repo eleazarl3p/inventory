@@ -29,8 +29,10 @@ export class StockController {
   }
 
   @Post('review')
-  reviewStock(@Body(new ValidateListStockDto()) stocks: CreateStockDto[]) {
-    this.stockService.reviewStock(stocks);
+  async reviewStock(
+    @Body(new ValidateListStockDto()) stocks: CreateStockDto[],
+  ) {
+    return await this.stockService.reviewStock(stocks);
   }
 
   @Get()

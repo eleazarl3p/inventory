@@ -6,19 +6,38 @@ import {
   Patch,
   Param,
   Delete,
+  ForbiddenException,
 } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { CreateTicketItemDto } from './dto/create-ticket-item.dto';
+
+import { UserService } from 'src/user/user.service';
+import { UserActivityLogService } from 'src/user-activity-log/user-activity-log.service';
+import { userAction } from 'src/user-activity-log/entities/user-activity-log.entity';
 
 @Controller('ticket')
 export class TicketController {
-  constructor(private readonly ticketService: TicketService) {}
+  constructor(
+    private readonly ticketService: TicketService,
+
+    private readonly userService: UserService,
+
+    private readonly userActivityLogService: UserActivityLogService,
+  ) {}
 
   @Post()
-  create(@Body() createTicketDto: CreateTicketDto) {
-    return this.ticketService.create(createTicketDto);
+  async create(@Body() createTicketDto: CreateTicketDto) {
+    const user = await this.userService.findOne(1);
+
+    if (!user) {
+      throw new ForbiddenException('User not authorized');
+    }
+    const newTicket = await this.ticketService.create(createTicketDto, user);
+
+    this.userActivityLogService.create(user, userAction.CREATE, {
+      ticket: { id: newTicket._id, barcode: newTicket.barcode },
+    });
   }
 
   @Get()

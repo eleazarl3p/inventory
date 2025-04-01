@@ -4,6 +4,7 @@ import { UpdateItemDto } from './dto/update-item.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from './entities/item.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ItemService {
@@ -11,19 +12,25 @@ export class ItemService {
     @InjectRepository(Item)
     private readonly itemRepo: Repository<Item>,
   ) {}
-  async create(createItemDto: CreateItemDto) {
+  async create(createItemDto: CreateItemDto, user: User) {
     try {
-      const newItem = this.itemRepo.create(createItemDto);
+      const newItem = this.itemRepo.create({
+        ...createItemDto,
+        user: { _id: user._id } as User,
+      });
       return await this.itemRepo.save(newItem);
     } catch (error) {
       console.log('error : ', error);
     }
   }
 
-  async createMultipleItem(itemsDto: CreateItemDto[]) {
+  async createMultipleItem(
+    itemsDto: CreateItemDto[],
+    user: User,
+  ): Promise<Item[]> {
     const result = await Promise.all(
       itemsDto.map(async (item) => {
-        return await this.create(item);
+        return await this.create(item, user);
       }),
     );
 

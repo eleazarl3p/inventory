@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Ticket, ticketStatus } from './entities/ticket.entity';
 import { TicketItem } from './entities/ticket-item.entity';
 import { Item } from 'src/item/entities/item.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TicketService {
@@ -17,11 +18,14 @@ export class TicketService {
     private readonly ticketItemRepo: Repository<TicketItem>,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
+  async create(createTicketDto: CreateTicketDto, user: User) {
     const lastTicketId = (await this.lastId()) + 1;
     createTicketDto.barcode = `TI-${lastTicketId.toString().padStart(5, '0')}`;
 
-    const newTicket = this.ticketRepo.create(createTicketDto);
+    const newTicket = this.ticketRepo.create({
+      ...createTicketDto,
+      user: { _id: user._id } as User,
+    });
 
     const saveTicket = await this.ticketRepo.save(newTicket);
 

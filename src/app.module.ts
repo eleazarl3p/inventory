@@ -6,6 +6,9 @@ import { StockModule } from './stock/stock.module';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TicketModule } from './ticket/ticket.module';
+import { UserModule } from './user/user.module';
+import { UserActivityLogModule } from './user-activity-log/user-activity-log.module';
+import { AuthModule } from './auth/auth.module';
 
 import * as dotenv from 'dotenv';
 
@@ -27,6 +30,9 @@ dotenv.config();
     ItemModule,
     StockModule,
     TicketModule,
+    UserModule,
+    UserActivityLogModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

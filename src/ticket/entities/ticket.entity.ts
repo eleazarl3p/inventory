@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TicketItem } from './ticket-item.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export enum ticketType {
   PURCHASE = 'PURCHASE',
@@ -36,4 +38,7 @@ export class Ticket {
 
   @OneToMany(() => TicketItem, (ti) => ti.ticket)
   items: TicketItem[];
+
+  @ManyToOne(() => User)
+  user: User;
 }
